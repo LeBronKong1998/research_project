@@ -62,6 +62,12 @@ python -m vehtraj evaluate --checkpoint checkpoints/interaction-mini.pt --output
 
 ## 工程验证
 
-`bash scripts/setup.sh` 已实际完整重跑：安装锁定依赖、可编辑安装、`pip check`、真实 CSV 下载校验、`pytest` **16 passed**、CPU 前向/反向 smoke 全部成功。测试覆盖重复行/非法数值/采样率拒绝、断帧拒绝、按 case 划分、历史邻车输入不依赖未来、mask 不受无效邻车影响、oracle 与 top-1 指标区分、恒速预测、无界半径 JSON 和下载器不覆盖未知文件。
+`bash scripts/setup.sh` 已实际完整重跑：安装锁定依赖、可编辑安装、`pip check`、真实 CSV 下载校验、原训练版本 `pytest` **16 passed**、CPU 前向/反向 smoke 全部成功。测试覆盖重复行/非法数值/采样率拒绝、断帧拒绝、按 case 划分、历史邻车输入不依赖未来、mask 不受无效邻车影响、oracle 与 top-1 指标区分、恒速预测、无界半径 JSON 和下载器不覆盖未知文件。
 
 Windows 入口、GitHub Actions 云端执行、CUDA 和新云任务快照恢复尚未实测；这里的测试通过指当前 Linux 实例。
+
+## 原始数据打包与浏览界面更新
+
+真实 CSV 现已直接纳入仓库（校验值保持不变），不再要求用户先运行下载脚本才能看到数据。`docs/data-explorer.html` 是包含同一原始 CSV 的离线交互界面，支持随机 case、播放、筛选和原始数据导出。新测试结果和浏览器交互验证见 [data-explorer-validation.json](data-explorer-validation.json)；界面截图见 [data-explorer-preview.png](data-explorer-preview.png)。该更新不改变训练数据或模型指标。
+
+此更新验证：20 项测试通过；Chromium 逐一打开 52 个场景，随机种子、播放、逐帧、表格定位、缩放与重置、完整 CSV/单场景导出、桌面和手机布局均通过，页面无浏览器错误、无外部数据/脚本请求。完整 CSV 导出与源文件逐字节一致。只用 Git 暂存的受版本管理文件生成独立副本后，20 项测试、标准库界面重建、111 个测试目标的模型评估均通过，指标与原报告一致；不依赖原工作目录内被忽略的数据文件。

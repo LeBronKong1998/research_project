@@ -13,7 +13,7 @@ Jiang et al., **A naturalistic trajectory dataset with dense interaction for aut
 - 1,535,255 bytes，24,771 行，52 个 case；不是完整 INTERACTION，也不是全部 InterHub。
 - 原始列：`case_id,track_id,frame_id,timestamp_ms,agent_type,x,y,vx,vy,psi_rad,length,width`。
 - 世界坐标为米，速度米/秒，航向弧度，时间毫秒；10 Hz，每个 case 最长 40 帧。
-- 数据留在本地 `data/interaction`，不将上游原始数据重新发布到 GitHub；使用须遵守 INTERACTION 与发布方的数据条款。作者代码许可不自动替代原数据许可。
+- 原始 CSV 已随工程存入 `data/interaction` 并纳入 GitHub；源文件逐字节保留，来源、校验值和上游许可通知同时提供。使用须遵守 INTERACTION 与发布方的数据条款，作者代码许可不自动替代原数据许可。
 
 ## 文献对实现的影响
 

@@ -1,0 +1,29 @@
+{
+  "all_cases_rendered": 52,
+  "seeded_random_cases": [
+    "16",
+    "24",
+    "2"
+  ],
+  "download_sha256": "c59094abd09f3638268b916a8f24a1b83458ace02d2d8dd4d6861082401b6970",
+  "case_export_rows": 352,
+  "browser_errors": [],
+  "external_requests": [],
+  "controls": "case/track selection, seeded random, slider, keyboard, play/pause, table, toggles, zoom/reset, exports",
+  "desktop_viewport": [
+    1440,
+    1080
+  ],
+  "mobile_viewport": [
+    390,
+    844
+  ],
+  "unit_tests_passed": 20,
+  "tracked_files_only_copy": {
+    "data_rows": 24771,
+    "case_count": 52,
+    "evaluation_target_count": 111,
+    "metrics_match_previous_checkpoint": true,
+    "viewer_rebuild_matches": true
+  }
+}

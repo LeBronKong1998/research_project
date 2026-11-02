@@ -4,6 +4,22 @@
 
 默认 **10 Hz、1 秒历史 → 3 秒未来**，三个预测分支，最多八辆邻车。真实数据来自 InterHub 论文作者公开的 INTERACTION 路口子集：52 个 case、24,771 行记录。该子集适合开发验证，不足以代表所有复杂交通场景。合成数据仅用于单元测试/显式 `--source synthetic` 调试，训练与评估默认真实数据，缺数据会报错，绝不自动回退。
 
+## 原始数据与离线可视化（无需安装依赖）
+
+仓库直接包含 [原始 CSV](data/interaction/DR_USA_Intersection_GL_train.csv)、[来源与许可说明](data/interaction/README.md) 和 [数据浏览器 HTML](docs/data-explorer.html)。克隆工程或下载 GitHub ZIP 后，**双击 `docs/data-explorer.html`**，用 Chrome / Edge / Firefox 打开即可。GitHub 的文件页只展示源代码，需先下载 HTML 到本地打开。
+
+界面支持随机种子选场景、52 个 case 切换、播放/暂停、逐帧滑块、车辆选择、位置/速度/航向/尺寸、原始表格，以及导出完整 CSV 或当前场景 CSV。蓝色实线和橙色虚线分别是前 1 秒与后 3 秒的**实际观测**，不是模型预测。页面内嵌原始 CSV，无 CDN、无服务器依赖，断网可用。
+
+CSV 原样保留全部 24,771 行：其中 24,415 行汽车、356 行行人/自行车；后者原本缺少航向和尺寸，界面用圆点表示并保留缺失值。训练只用汽车，数据浏览保留全部原始记录。查看 [界面截图](reports/data-explorer-preview.png)。
+
+修改/替换数据后重建页面（此入口只需 Python 标准库）：
+
+```bash
+python scripts/build_data_explorer.py
+# 安装训练环境后，也可以使用：
+python -m vehtraj explore
+```
+
 ## Linux / 云环境
 
 锁定的 Linux/云端脚本要求 Python 3.12；Windows 非锁定依赖入口支持 Python 3.11–3.12。已实测 Python 3.12 + PyTorch 2.5.1 CPU，不要求 GPU 或在线服务：
@@ -17,7 +33,7 @@ python -m vehtraj train --epochs 30 --batch-size 32 --accumulation 1 --lr 0.001 
 python -m vehtraj evaluate --checkpoint runs/interaction-real/best.pt --output runs/interaction-real
 ```
 
-`setup.sh` 创建/复用外部 venv，安装官方 CPU PyTorch、锁定依赖和本地可编辑包，下载并验证真实 CSV，执行单元测试与前后向 smoke。普通 Linux 可用 `TRAJECTORY_VENV="$PWD/.venv" bash scripts/setup.sh`，然后激活 `.venv/bin/activate`。下载需要 `raw.githubusercontent.com`；依赖需要 PyPI 与 PyTorch 官方域名，保持 TLS 和 SHA-256 验证。
+`setup.sh` 创建/复用外部 venv，安装官方 CPU PyTorch、锁定依赖和本地可编辑包，校验内置真实 CSV（文件缺失时才下载），执行单元测试与前后向 smoke。普通 Linux 可用 `TRAJECTORY_VENV="$PWD/.venv" bash scripts/setup.sh`，然后激活 `.venv/bin/activate`。仅在补回缺失数据时需要 `raw.githubusercontent.com`；依赖需要 PyPI 与 PyTorch 官方域名，保持 TLS 和 SHA-256 验证。
 
 ## Windows
 

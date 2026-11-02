@@ -50,7 +50,7 @@ def download_interaction(output):
                 "source_url": SOURCE_URL, "source_commit": SOURCE_COMMIT,
                 "sha256": CSV_SHA256, "bytes": CSV_SIZE, "row_count": len(rows),
                 "case_count": len({r["case_id"] for r in rows}),
-                "license_note": "Upstream dataset terms apply; raw data is not redistributed in this repository.",
+                "license_note": "Bundled unmodified upstream CSV subset; attribution and upstream license are in data/interaction. Original dataset terms apply.",
                 "scope": "52 cases from DR_USA_Intersection_GL, not the full benchmark"}
     (output / "provenance.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return {"output": str(target), **manifest}

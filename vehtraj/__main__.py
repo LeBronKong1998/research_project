@@ -237,6 +237,11 @@ def download(args):
     print(json.dumps(download_interaction(args.output), indent=2), flush=True)
 
 
+def explore(args):
+    from .explore import build_explorer
+    print(json.dumps(build_explorer(args.csv, args.output), ensure_ascii=False, indent=2))
+
+
 def main():
     parser = argparse.ArgumentParser(description="GRU-GAT multimodal vehicle trajectory prediction")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -267,13 +272,16 @@ def main():
             command.add_argument("--max-animations", type=int, default=3)
     download_command = commands.add_parser("download")
     download_command.add_argument("--output", default="data/interaction")
+    explorer = commands.add_parser("explore", help="build an offline raw CSV data explorer")
+    explorer.add_argument("--csv", default="data/interaction/DR_USA_Intersection_GL_train.csv")
+    explorer.add_argument("--output", default="docs/data-explorer.html")
     args = parser.parse_args()
     for name in ("history", "future", "stride", "epochs", "batch_size", "accumulation", "hidden", "modes", "log_every"):
         if hasattr(args, name) and getattr(args, name) <= 0:
             parser.error(f"--{name.replace(chr(95), chr(45))} must be positive")
     if getattr(args, "max_batches", 0) < 0 or getattr(args, "max_samples", 0) < 0:
         parser.error("sample/batch limits cannot be negative")
-    {"train": train, "evaluate": evaluate, "smoke": smoke, "download": download}[args.command](args)
+    {"train": train, "evaluate": evaluate, "smoke": smoke, "download": download, "explore": explore}[args.command](args)
 
 
 if __name__ == "__main__":

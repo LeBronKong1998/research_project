@@ -6,6 +6,6 @@
   "bytes": 1535255,
   "row_count": 24771,
   "case_count": 52,
-  "license_note": "Upstream dataset terms apply; raw data is not redistributed in this repository.",
+  "license_note": "Bundled unmodified upstream CSV subset; attribution and upstream license are in data/interaction. Original dataset terms apply.",
   "scope": "52 cases from DR_USA_Intersection_GL, not the full benchmark"
 }

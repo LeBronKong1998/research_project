@@ -1,0 +1,11 @@
+{
+  "dataset": "INTERACTION multi-agent, InterHub authors' real subset",
+  "source_url": "https://raw.githubusercontent.com/zxc-tju/InterHub/1d8a764554017618447247e5c55eff4b4ab50de4/data/0_origin_datasets/interaction_multi/train/DR_USA_Intersection_GL_train.csv",
+  "source_commit": "1d8a764554017618447247e5c55eff4b4ab50de4",
+  "sha256": "c59094abd09f3638268b916a8f24a1b83458ace02d2d8dd4d6861082401b6970",
+  "bytes": 1535255,
+  "row_count": 24771,
+  "case_count": 52,
+  "license_note": "Bundled unmodified upstream CSV subset; attribution and upstream license are in data/interaction. Original dataset terms apply.",
+  "scope": "52 cases from DR_USA_Intersection_GL, not the full benchmark"
+}

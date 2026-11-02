@@ -17,3 +17,6 @@ include = ["vehtraj*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+vehtraj = ["web/*.html"]

@@ -11,5 +11,6 @@ export MPLCONFIGDIR="${MPLCONFIGDIR:-/tmp/trajectory-matplotlib}"
 export OMP_NUM_THREADS="${OMP_NUM_THREADS:-2}"
 "$VENV_PATH/bin/python" -m pip check
 "$VENV_PATH/bin/python" -m vehtraj download
+"$VENV_PATH/bin/python" scripts/build_data_explorer.py
 "$VENV_PATH/bin/python" -m pytest -q
 "$VENV_PATH/bin/python" -m vehtraj smoke --device cpu

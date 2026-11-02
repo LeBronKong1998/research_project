@@ -2,7 +2,13 @@ __pycache__/
 .pytest_cache/
 *.pyc
 runs/
-data/
+data/*
+!data/interaction/
+data/interaction/*
+!data/interaction/DR_USA_Intersection_GL_train.csv
+!data/interaction/provenance.json
+!data/interaction/README.md
+!data/interaction/UPSTREAM_LICENSE.txt
 torch-wheel-*/
 .conda/
 .venv/
