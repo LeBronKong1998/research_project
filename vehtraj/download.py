@@ -44,6 +44,7 @@ def download_interaction(output):
                 partial.unlink(missing_ok=True)
                 raise
         partial.replace(target)
+    download_maps(output / "maps")
     with target.open(newline="", encoding="utf-8") as stream:
         rows = list(csv.DictReader(stream))
     manifest = {"dataset": "INTERACTION multi-agent, InterHub authors' real subset",
@@ -54,3 +55,35 @@ def download_interaction(output):
                 "scope": "52 cases from DR_USA_Intersection_GL, not the full benchmark"}
     (output / "provenance.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return {"output": str(target), **manifest}
+
+
+def download_maps(output):
+    """Restore only the two pinned matching map source files; never guess another map."""
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=True)
+    expected = {
+        'DR_USA_Intersection_GL.osm': '96d9b096e70bab53f5b55e167dfcaaf6fdd9b68adb4ddb5c25cef38cbcf24db0',
+        'DR_USA_Intersection_GL.osm_xy': '02e741afc862b1bc30a29075289240411b6698818eef78bc2bbd0d66c6f1b803',
+    }
+    for name, digest in expected.items():
+        target = output / name
+        if target.exists():
+            if sha256(target) != digest:
+                raise ValueError(f'Existing map differs from pinned source: {target}')
+            continue
+        url = f'https://raw.githubusercontent.com/zxc-tju/InterHub/{SOURCE_COMMIT}/data/0_origin_datasets/interaction_multi/maps/{name}'
+        part = target.with_suffix(target.suffix + '.part')
+        with part.open('xb') as stream:
+            try:
+                with urllib.request.urlopen(url, timeout=60) as response:
+                    while block := response.read(1024 * 1024): stream.write(block)
+                stream.flush()
+                if sha256(part) != digest: raise ValueError(f'Map checksum mismatch: {name}')
+            except BaseException:
+                part.unlink(missing_ok=True)
+                raise
+        part.replace(target)
+    from .maps import load_map, prepare_map
+    source = output / 'DR_USA_Intersection_GL.osm'
+    if not source.with_suffix('.map.json').exists(): prepare_map(source)
+    else: load_map(source)

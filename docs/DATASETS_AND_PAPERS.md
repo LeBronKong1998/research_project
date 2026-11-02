@@ -19,7 +19,7 @@ Jiang et al., **A naturalistic trajectory dataset with dense interaction for aut
 
 - INTERACTION 与 InterHub：采用真实多车路口轨迹、显式身份/时间列，按 case 分组；默认 10 帧历史、30 帧预测。这与 multi-agent 版本的 4 秒样本兼容，不能沿用原脚本的 30+50 帧。
 - Li et al., **GRIP: Graph-based Interaction-aware Trajectory Prediction**, ITSC 2019；增强版 **GRIP++**, [arXiv:1907.07792](https://arxiv.org/abs/1907.07792)、[作者实现](https://github.com/xincoder/GRIP)：车辆间交互应通过图结构编码。此项目使用目标车星形图上的单头注意力和 GRU，属于轻量基线，不宣称完整复现 GRIP。
-- Liang et al., **Learning Lane Graph Representations for Motion Forecasting (LaneGCN)**, ECCV 2020, [arXiv:2007.13732](https://arxiv.org/abs/2007.13732)、[作者实现](https://github.com/uber-research/LaneGCN)：地图和车道拓扑对复杂场景有价值；本版本没有读取地图，不能宣称具备相应能力。
+- Liang et al., **Learning Lane Graph Representations for Motion Forecasting (LaneGCN)**, ECCV 2020, [arXiv:2007.13732](https://arxiv.org/abs/2007.13732)、[作者实现](https://github.com/uber-research/LaneGCN)：地图和车道拓扑对复杂场景有价值；本版本已读取地图进行可视化，但没有将地图作为模型输入，不能宣称具备相应地图建模能力。
 - Deo & Trivedi, **Convolutional Social Pooling for Vehicle Trajectory Prediction**, CVPR Workshops 2018, [arXiv:1805.06771](https://arxiv.org/abs/1805.06771)：多模态轨迹需要区分预测分支与实际可选择的轨迹，因此同时报告 best-of-K 与 top-1，不能把 oracle minADE 当作部署误差。
 
 本次在线实际核查了 INTERACTION 官方工具、InterHub 作者说明及真实 CSV。arXiv/期刊全文站点受当前环境网络策略限制；以上论文链接是可追溯参考，不表示本次已完整下载和逐篇复现实验。新增算法是本项目的基线实现。
@@ -30,7 +30,7 @@ Jiang et al., **A naturalistic trajectory dataset with dense interaction for aut
 
 该 mini 子集来自官方 train 文件，在其中另建自定义划分，**不是官方挑战测试协议**。不同 case 可能来自同一地点、相关时间或同一物理车辆；case_id 内 track_id 不能证明跨 case 独立。只保证 case 不重叠，不保证地点、时间、物理车辆独立，不把结果称作跨场景泛化或排行榜成绩。完整研究应使用官方原始 train/val/test 元数据，或增加独立录制文件/地点，再评估分布迁移。不要合并镜像重复 CSV 或官方 train/val 数据后将结果当作官方成绩。
 
-输入只用历史帧，邻车按历史最后一帧距离选取；最多八辆邻车，40 米图掩码；不插补断帧。重复 case/track/frame、非有限状态与非 10 Hz 时间戳直接报错。完整未来只用于目标标签，不参与邻车筛选。只保留 `car/vehicle`，没有地图、交通灯与行人建模。
+输入只用历史帧，邻车按历史最后一帧距离选取；最多八辆邻车，40 米图掩码；不插补断帧。重复 case/track/frame、非有限状态与非 10 Hz 时间戳直接报错。完整未来只用于目标标签，不参与邻车筛选。只保留 `car/vehicle`，没有地图、交通灯与行人输入建模；真实 Lanelet2 地图已用于可视化和验证。
 
 ## 指标解释
 
@@ -46,3 +46,5 @@ Jiang et al., **A naturalistic trajectory dataset with dense interaction for aut
 ## 扩展数据
 
 完整 INTERACTION 更适合多路口、环岛、汇入泛化；highD / inD / exiD 分别适合高速、路口、出入口，但需申请许可，CSV 列、采样率和坐标定义不同。NGSIM 可公开获取 CSV，但有已知测量噪声；不能把非因果平滑产生的速度用作在线输入而不披露未来泄漏。本版本不提供未经验证的 highD/exiD/inD 占位开关；仅承诺已实现并实测的 INTERACTION 解析器。
+
+地图文件、官方投影、模型验证回放与命令见 [OFFICIAL_VISUALIZATION.md](OFFICIAL_VISUALIZATION.md)。

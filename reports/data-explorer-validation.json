@@ -7,6 +7,8 @@
   ],
   "download_sha256": "c59094abd09f3638268b916a8f24a1b83458ace02d2d8dd4d6861082401b6970",
   "case_export_rows": 352,
+  "val_targets_checked": 33,
+  "test_targets_checked": 111,
   "browser_errors": [],
   "external_requests": [],
   "controls": "case/track selection, seeded random, slider, keyboard, play/pause, table, toggles, zoom/reset, exports",
@@ -18,12 +20,21 @@
     390,
     844
   ],
-  "unit_tests_passed": 20,
+  "unit_tests_passed": 27,
+  "official_renderer_commit": "053213d8aeb4c6f6132d272325a11ae623bd4e35",
+  "map_nodes": 583,
+  "map_ways": 163,
+  "osm_xy_max_error_m": 6.875183159753702e-06,
+  "training_epochs": 30,
+  "selected_epoch": 30,
+  "checkpoint_sha256": "3679135bf6555460fa31e859ec3bfff4d13f24cb8db4ddff4508f32e601742ea",
+  "retrained_checkpoint_byte_identical": true,
   "tracked_files_only_copy": {
-    "data_rows": 24771,
-    "case_count": 52,
-    "evaluation_target_count": 111,
-    "metrics_match_previous_checkpoint": true,
-    "viewer_rebuild_matches": true
+    "unit_tests_passed": 27,
+    "validation_targets": 33,
+    "test_targets": 111,
+    "prediction_samples_and_metrics_match": true,
+    "official_png_rendered": true,
+    "offline_viewer_rebuilt": true
   }
 }

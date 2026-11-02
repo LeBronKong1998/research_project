@@ -7,7 +7,7 @@ name = "trajectory-prediction"
 version = "0.2.0"
 description = "GRU graph-attention vehicle trajectory prediction on real INTERACTION CSVs"
 requires-python = ">=3.11,<3.13"
-dependencies = ["numpy>=1.23,<2", "torch==2.5.1", "matplotlib>=3.6,<4"]
+dependencies = ["numpy>=1.23,<2", "torch==2.5.1", "matplotlib>=3.6,<4", "pyproj==3.7.2"]
 
 [project.scripts]
 trajectory-prediction = "vehtraj.__main__:main"
@@ -19,4 +19,4 @@ include = ["vehtraj*"]
 testpaths = ["tests"]
 
 [tool.setuptools.package-data]
-vehtraj = ["web/*.html"]
+vehtraj = ["web/*.html", "web/*.js", "official/LICENSE", "official/provenance.json"]

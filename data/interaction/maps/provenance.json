@@ -1,0 +1,15 @@
+{
+  "source_repository": "https://github.com/zxc-tju/InterHub",
+  "source_commit": "1d8a764554017618447247e5c55eff4b4ab50de4",
+  "scenario": "DR_USA_Intersection_GL",
+  "files": {
+    "DR_USA_Intersection_GL.osm": {
+      "sha256": "96d9b096e70bab53f5b55e167dfcaaf6fdd9b68adb4ddb5c25cef38cbcf24db0",
+      "source_url": "https://raw.githubusercontent.com/zxc-tju/InterHub/1d8a764554017618447247e5c55eff4b4ab50de4/data/0_origin_datasets/interaction_multi/maps/DR_USA_Intersection_GL.osm"
+    },
+    "DR_USA_Intersection_GL.osm_xy": {
+      "sha256": "02e741afc862b1bc30a29075289240411b6698818eef78bc2bbd0d66c6f1b803",
+      "source_url": "https://raw.githubusercontent.com/zxc-tju/InterHub/1d8a764554017618447247e5c55eff4b4ab50de4/data/0_origin_datasets/interaction_multi/maps/DR_USA_Intersection_GL.osm_xy"
+    }
+  }
+}

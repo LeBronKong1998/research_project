@@ -129,6 +129,7 @@ class TrajectoryDataset(Dataset):
         if min(stride, max_agents, history, future) <= 0:
             raise ValueError("stride, max_agents, history and future must be positive")
         self.samples = []
+        self.metadata = []
         for scene in scenes:
             tracks = scene["tracks"]
             for ego_id, ego in tracks.items():
@@ -173,6 +174,8 @@ class TrajectoryDataset(Dataset):
                     target = states[start + history:start + history + future].astype(np.float32).copy()
                     target[:, :2] -= reference
                     self.samples.append((agents, mask, target, scene["id"], scene["kind"], reference))
+                    self.metadata.append({"track_id": str(ego_id), "history_frames": window[:history].tolist(),
+                                          "future_frames": window[history:].tolist()})
 
     def __len__(self):
         return len(self.samples)

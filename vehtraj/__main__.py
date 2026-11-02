@@ -13,7 +13,6 @@ from .data import DT, TrajectoryDataset, load_scenes, split_scenes
 from .download import download_interaction
 from .metrics import nonconformity, scene_calibration, trajectory_metrics
 from .model import TrajectoryGAT, multimodal_loss
-from .visualize import animate_scene, draw_scene
 
 
 def set_seed(seed):
@@ -130,6 +129,11 @@ def train(args):
         write_json(output / "training.json", {"epochs": history, "counts": {key: len(value) for key, value in datasets.items()}, "device": str(device), "max_batches": args.max_batches, "configuration": vars(args), "data_manifest": data_manifest(args),
             "scene_ids": {key: sorted({sample[3] for sample in value.samples}) for key, value in datasets.items()}})
     print(f"checkpoint={output / 'best.pt'}", flush=True)
+    if args.source == "interaction":
+        from .review import export_review
+        best_model = load_model(output / "best.pt", device)
+        export_review(args, infer(best_model, datasets["val"], device), "val", output,
+                      checkpoint=output / "best.pt", training=output / "training.json")
 
 
 def load_model(checkpoint, device):
@@ -150,6 +154,7 @@ def infer(model, dataset, device, max_samples=0):
             prediction = prediction[0].cpu().numpy()
             probabilities = torch.softmax(logits[0], -1).cpu().numpy()
             records.append({"scene_id": scene_id, "kind": kind, "sample_index": index,
+                            **dataset.metadata[index],
                             "history": agents, "truth": truth, "prediction": prediction,
                             "probabilities": probabilities, "reference": reference,
                             "score": nonconformity(prediction, truth),
@@ -198,14 +203,20 @@ def evaluate(args):
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
     write_json(output / "calibration.json", calibration)
-    records = infer(model, datasets["test"], device, args.max_samples)
+    records = infer(model, datasets[args.split], device, args.max_samples)
     summary = export_records(records, output, calibration["radius_m"])
     summary.update({"source": args.source, "history_frames": args.history, "future_frames": args.future,
                     "dt_seconds": DT, "data_manifest": data_manifest(args),
-                    "test_total_samples": len(datasets["test"]), "subset_evaluation": bool(args.max_samples and args.max_samples < len(datasets["test"])),
+                    "split": args.split, "split_total_samples": len(datasets[args.split]),
+                    "test_total_samples": len(datasets["test"]), "subset_evaluation": bool(args.max_samples and args.max_samples < len(datasets[args.split])),
                     "checkpoint": str(args.checkpoint), "selected_epoch": saved["epoch"], "training_max_batches": saved.get("max_batches", 0),
                     "protocol": "custom case-disjoint split; not official challenge benchmark"})
     write_json(output / "evaluation.json", summary)
+    if args.source == "interaction":
+        from .review import export_review
+        export_review(args, records, args.split, output, checkpoint=args.checkpoint,
+                      training=args.training_log or (Path(args.checkpoint).parent / "training.json"), summary=summary)
+    from .visualize import animate_scene, draw_scene
     previews = set()
     for sample in records:
         key = sample["kind"] if args.source == "synthetic" else sample["scene_id"]
@@ -213,10 +224,20 @@ def evaluate(args):
             continue
         previews.add(key)
         name = sample["kind"] if args.source == "synthetic" else f"interaction_{len(previews):02d}"
-        draw_scene(output / f"{name}.png", sample["kind"], sample["history"], sample["truth"], sample["prediction"], calibration["radius_m"])
-        animate_scene(output / f"{name}.gif", sample["kind"], sample["history"], sample["truth"], sample["prediction"])
+        if args.source == "interaction":
+            from types import SimpleNamespace
+            from .official_viewer import run_viewer
+            csv_path = Path(args.data_dir) / sample["scene_id"].rsplit(":", 1)[0]
+            scenario = csv_path.stem.removesuffix("_train").removesuffix("_val")
+            run_viewer(SimpleNamespace(csv=csv_path, map=csv_path.parent / "maps" / (scenario + ".osm"),
+                                      case_id=sample["scene_id"].rsplit(":",1)[1], review=output / f"{args.split}-review.json",
+                                      sample_index=sample["sample_index"], frame=sample["future_frames"][-1],
+                                      save_png=output / f"{name}.png", save_gif=output / f"{name}.gif"))
+        else:
+            draw_scene(output / f"{name}.png", sample["kind"], sample["history"], sample["truth"], sample["prediction"], calibration["radius_m"])
+            animate_scene(output / f"{name}.gif", sample["kind"], sample["history"], sample["truth"], sample["prediction"])
         print(f"animation={output / (name + '.gif')} scene={sample['scene_id']}", flush=True)
-    print(json.dumps(json_ready({"calibration": calibration, "test": summary}), indent=2, allow_nan=False), flush=True)
+    print(json.dumps(json_ready({"calibration": calibration, args.split: summary}), indent=2, allow_nan=False), flush=True)
 
 
 def smoke(args):
@@ -237,9 +258,14 @@ def download(args):
     print(json.dumps(download_interaction(args.output), indent=2), flush=True)
 
 
+def visualize(args):
+    from .official_viewer import run_viewer
+    run_viewer(args)
+
+
 def explore(args):
     from .explore import build_explorer
-    print(json.dumps(build_explorer(args.csv, args.output), ensure_ascii=False, indent=2))
+    print(json.dumps(build_explorer(args.csv, args.output, review_files=args.review, default_mode=args.mode), ensure_ascii=False, indent=2))
 
 
 def main():
@@ -267,21 +293,34 @@ def main():
             command.add_argument("--max-batches", type=int, default=0)
             command.add_argument("--log-every", type=int, default=20)
         if name == "evaluate":
+            command.add_argument("--split", choices=("val", "test"), default="test")
+            command.add_argument("--training-log", help="matching training.json for the loss chart")
             command.add_argument("--checkpoint", required=True)
             command.add_argument("--max-samples", type=int, default=0)
             command.add_argument("--max-animations", type=int, default=3)
     download_command = commands.add_parser("download")
     download_command.add_argument("--output", default="data/interaction")
+    visual = commands.add_parser("visualize", help="official INTERACTION map renderer with model overlays")
+    visual.add_argument("--csv", default="data/interaction/DR_USA_Intersection_GL_train.csv")
+    visual.add_argument("--map", default="data/interaction/maps/DR_USA_Intersection_GL.osm")
+    visual.add_argument("--case-id", default="13")
+    visual.add_argument("--review", help="JSON exported by train/evaluate")
+    visual.add_argument("--sample-index", type=int, default=0)
+    visual.add_argument("--frame", type=int, default=10)
+    visual.add_argument("--save-png")
+    visual.add_argument("--save-gif")
     explorer = commands.add_parser("explore", help="build an offline raw CSV data explorer")
     explorer.add_argument("--csv", default="data/interaction/DR_USA_Intersection_GL_train.csv")
     explorer.add_argument("--output", default="docs/data-explorer.html")
+    explorer.add_argument("--review", action="append", help="matching val/test-review.json, repeatable")
+    explorer.add_argument("--mode", choices=("raw","val","test"), default="raw")
     args = parser.parse_args()
     for name in ("history", "future", "stride", "epochs", "batch_size", "accumulation", "hidden", "modes", "log_every"):
         if hasattr(args, name) and getattr(args, name) <= 0:
             parser.error(f"--{name.replace(chr(95), chr(45))} must be positive")
     if getattr(args, "max_batches", 0) < 0 or getattr(args, "max_samples", 0) < 0:
         parser.error("sample/batch limits cannot be negative")
-    {"train": train, "evaluate": evaluate, "smoke": smoke, "download": download, "explore": explore}[args.command](args)
+    {"train": train, "evaluate": evaluate, "smoke": smoke, "download": download, "explore": explore, "visualize": visualize}[args.command](args)
 
 
 if __name__ == "__main__":

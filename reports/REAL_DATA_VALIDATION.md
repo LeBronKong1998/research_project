@@ -48,7 +48,7 @@ case 总计 52，完整可用目标轨迹共 468。所有输入是过去 10 帧�
 
 - [evaluation.json](evaluation.json)：原始浮点结果、基线、数据哈希和评估范围。
 - [calibration.json](calibration.json)：校准计数与无界半径。
-- [示例轨迹图](interaction-example.png)：仅展示运动轨迹，不伪造路面地图。
+- [示例轨迹图](interaction-example.png)：已更新为官方真实地图上的验证集预测示例；完整集合指标仍见 evaluation.json。
 - [训练权重](../checkpoints/interaction-mini.pt)：SHA-256 `3679135bf6555460fa31e859ec3bfff4d13f24cb8db4ddff4508f32e601742ea`。
 
 已上传的权重可直接评估：
@@ -71,3 +71,7 @@ Windows 入口、GitHub Actions 云端执行、CUDA 和新云任务快照恢复�
 真实 CSV 现已直接纳入仓库（校验值保持不变），不再要求用户先运行下载脚本才能看到数据。`docs/data-explorer.html` 是包含同一原始 CSV 的离线交互界面，支持随机 case、播放、筛选和原始数据导出。新测试结果和浏览器交互验证见 [data-explorer-validation.json](data-explorer-validation.json)；界面截图见 [data-explorer-preview.png](data-explorer-preview.png)。该更新不改变训练数据或模型指标。
 
 此更新验证：20 项测试通过；Chromium 逐一打开 52 个场景，随机种子、播放、逐帧、表格定位、缩放与重置、完整 CSV/单场景导出、桌面和手机布局均通过，页面无浏览器错误、无外部数据/脚本请求。完整 CSV 导出与源文件逐字节一致。只用 Git 暂存的受版本管理文件生成独立副本后，20 项测试、标准库界面重建、111 个测试目标的模型评估均通过，指标与原报告一致；不依赖原工作目录内被忽略的数据文件。
+
+## 官方地图与训练验证更新
+
+已按 INTERACTION 官方无 Lanelet2 分支接入匹配的真实 OSM 地图。完整重新训练 30 轮后，选中 epoch 30，权重 SHA-256 与原权重逐字节相同，故原测试指标不变。统一浏览器界面新增验证集 33 个目标与测试集 111 个目标，自动生成的每次训练/评估回放文件分别为 `val-review.html/json`、`test-review.html/json`。官方 Matplotlib 地图/车辆函数实际生成 PNG/GIF。坐标投影检查、27 项测试与全部目标的界面核对结果见 [OFFICIAL_MAP_VALIDATION.md](OFFICIAL_MAP_VALIDATION.md)。

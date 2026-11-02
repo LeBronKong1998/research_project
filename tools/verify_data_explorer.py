@@ -89,6 +89,39 @@ with sync_playwright() as p:
     page.set_viewport_size({'width': 390, 'height': 844})
     assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
     page.screenshot(path=str(ROOT / 'reports/data-explorer-mobile.png'), full_page=True)
+    # The same interface reviews every real validation and test target on the map.
+    page.set_viewport_size({'width': 1440, 'height': 1080})
+    for split, expected_count in [('val',33),('test',111)]:
+        review = json.loads((ROOT/f'reports/{split}-review.json').read_text())
+        page.locator('#view-mode').select_option(split)
+        assert page.locator('#summary-count').inner_text() == str(expected_count)
+        assert page.locator('#summary-ade').inner_text() == f"{review['metrics']['top1ADE']:.3f}"
+        assert page.locator('#track-select').is_disabled()
+        page.locator('#prediction-choice').select_option('top1')
+        for sample in review['samples']:
+            if page.locator('#case-select').input_value() != sample['case_id']:
+                page.locator('#case-select').select_option(sample['case_id'])
+            page.locator('#sample-select').select_option(str(sample['sample_index']))
+            assert page.locator('#track-select').input_value() == sample['track_id']
+            page.locator('#frame-slider').fill('39')
+            assert page.locator('#sample-step-error').inner_text() == f"{sample['metrics']['top1FDE']:.3f}"
+            assert page.locator('#prediction-body tr').count() == 30
+        results[f'{split}_targets_checked'] = len(review['samples'])
+    # Show a fixed moving validation target, independent of whether its errors are good/bad.
+    page.locator('#view-mode').select_option('val')
+    page.locator('#case-select').select_option('16')
+    page.locator('#sample-select').select_option('9')
+    page.locator('#prediction-choice').select_option('all')
+    page.locator('#frame-slider').fill('39')
+    before_map = page.locator('#trajectory-canvas').evaluate('(canvas)=>canvas.toDataURL()')
+    page.locator('#show-map').uncheck()
+    assert before_map != page.locator('#trajectory-canvas').evaluate('(canvas)=>canvas.toDataURL()')
+    page.locator('#show-map').check()
+    assert before_map == page.locator('#trajectory-canvas').evaluate('(canvas)=>canvas.toDataURL()')
+    page.screenshot(path=str(ROOT/'reports/model-validation-preview.png'),full_page=True)
+    page.set_viewport_size({'width':390,'height':844})
+    assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
+    page.screenshot(path=str(ROOT/'reports/model-validation-mobile.png'),full_page=True)
     assert not errors, errors
     assert not requests, requests
     results.update({'browser_errors': errors, 'external_requests': requests,

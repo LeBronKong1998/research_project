@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/interaction-dataset/interaction-dataset",
+  "commit": "053213d8aeb4c6f6132d272325a11ae623bd4e35",
+  "files": {
+    "map_vis_without_lanelet.py": "add492e1c13b29084a94bb16d64e89cbc3fb895823666642736dd48de813e6a0",
+    "dict_utils.py": "1a26dc6d096eba674ac0e71bf149839a6675ac85c741320ce98368cc88281ecc",
+    "dataset_types.py": "5bd49a3c593448239bf8230817d4072ea366dbdb251a11c8597e0a9215524637",
+    "tracks_vis.py": "2c63fd81efaaac448bd69e82eeec6fffb90b007aefdcbd3143f72c176f80304a"
+  }
+}

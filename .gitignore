@@ -9,6 +9,7 @@ data/interaction/*
 !data/interaction/provenance.json
 !data/interaction/README.md
 !data/interaction/UPSTREAM_LICENSE.txt
+!data/interaction/maps/
 torch-wheel-*/
 .conda/
 .venv/

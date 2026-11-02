@@ -2,15 +2,15 @@
 
 在真实 **INTERACTION CSV** 上训练 GRU + 图注意力网络，预测周围车辆的多模态轨迹，并导出误差、恒速对照、逐帧预测及图像。项目包名为 `trajectory-prediction`，Python 模块仍为 `vehtraj`；上传到既有仓库 `LeBronKong1998/research_project`，未更改远程仓库名称。
 
-默认 **10 Hz、1 秒历史 → 3 秒未来**，三个预测分支，最多八辆邻车。真实数据来自 InterHub 论文作者公开的 INTERACTION 路口子集：52 个 case、24,771 行记录。该子集适合开发验证，不足以代表所有复杂交通场景。合成数据仅用于单元测试/显式 `--source synthetic` 调试，训练与评估默认真实数据，缺数据会报错，绝不自动回退。
+默认 **10 Hz、1 秒历史 → 3 秒未来**，三个预测分支，最多八辆邻车。真实数据来自 InterHub 论文作者公开的 INTERACTION 路口子集：52 个 case、24,771 行记录。该子集适合开发验证，不足以代表所有复杂交通场景。合成数据仅用于单元测试/显式 `--source synthetic` 调试，训练与评估默认真实数据，缺数据会报错，绝不自动回退。训练结束自动生成 `val-review.html`，评估自动生成 `test-review.html`，均使用真实地图和相同的可视化界面。
 
 ## 原始数据与离线可视化（无需安装依赖）
 
 仓库直接包含 [原始 CSV](data/interaction/DR_USA_Intersection_GL_train.csv)、[来源与许可说明](data/interaction/README.md) 和 [数据浏览器 HTML](docs/data-explorer.html)。克隆工程或下载 GitHub ZIP 后，**双击 `docs/data-explorer.html`**，用 Chrome / Edge / Firefox 打开即可。GitHub 的文件页只展示源代码，需先下载 HTML 到本地打开。
 
-界面支持随机种子选场景、52 个 case 切换、播放/暂停、逐帧滑块、车辆选择、位置/速度/航向/尺寸、原始表格，以及导出完整 CSV 或当前场景 CSV。蓝色实线和橙色虚线分别是前 1 秒与后 3 秒的**实际观测**，不是模型预测。页面内嵌原始 CSV，无 CDN、无服务器依赖，断网可用。
+界面支持随机种子选场景、52 个 case 切换、播放/暂停、逐帧滑块、车辆选择、位置/速度/航向/尺寸、原始表格，以及导出完整 CSV 或当前场景 CSV。现已接入匹配的真实 Lanelet2 地图，支持“原始数据 / 验证集预测 / 测试集预测”切换。蓝色是观测历史，绿色是真实未来，彩色虚线是模型预测，粗粉线是概率 top-1。页面内嵌原始 CSV，无 CDN、无服务器依赖，断网可用。
 
-CSV 原样保留全部 24,771 行：其中 24,415 行汽车、356 行行人/自行车；后者原本缺少航向和尺寸，界面用圆点表示并保留缺失值。训练只用汽车，数据浏览保留全部原始记录。查看 [界面截图](reports/data-explorer-preview.png)。
+CSV 原样保留全部 24,771 行：其中 24,415 行汽车、356 行行人/自行车；后者原本缺少航向和尺寸，界面用圆点表示并保留缺失值。训练只用汽车，数据浏览保留全部原始记录。查看 [原始数据截图](reports/data-explorer-preview.png) 与 [模型验证截图](reports/model-validation-preview.png)。官方流程、地图投影和 Matplotlib 控件入口见 [官方地图可视化指南](docs/OFFICIAL_VISUALIZATION.md)。
 
 修改/替换数据后重建页面（此入口只需 Python 标准库）：
 
@@ -65,10 +65,10 @@ python -m vehtraj evaluate --data-dir /path/to/interaction --history 30 --future
 - `evaluation.json`：minADE/minFDE、概率 top-1 ADE/FDE、位置 RMSE、1/2/3 秒误差、2 米终点命中率、速度/航向误差、恒速基线。
 - `predictions.csv`：每条轨迹、每个分支、每步概率、世界坐标预测、真值和位置误差。
 - `calibration.json`：校准 case 数与半径；数据不足时 `radius_m: null`，不是零误差。
-- PNG/GIF：观测、邻车、真实未来、三个预测分支；没有伪造道路背景。
+- PNG/GIF：直接用官方 INTERACTION 地图/车辆渲染函数绘制，叠加观测、邻车、真实未来、预测分支和误差。
 
 **minADE/minFDE 使用真实未来挑选最优分支，因此不能当作实际 top-1 准确率。** 恒速基线结果使用同一测试目标，应该同时对比。`--max-batches` 只适合流程检查；`--max-samples` 会明确标记部分评估，不能冒充完整结果。
 
 [数据来源、论文、划分限制与指标定义](docs/DATASETS_AND_PAPERS.md) · [本次真实数据实验](reports/REAL_DATA_VALIDATION.md)
 
-模型是目标车星形图单头注意力 + GRU 的轻量基线，没有地图、交通灯、行人、多车联合解码或碰撞约束。该路口子集只保证 case 划分不重叠，不证明物理车辆、地点或时间独立；不是官方挑战榜单结果，也不提供道路安全保证。
+模型是目标车星形图单头注意力 + GRU 的轻量基线，未把地图、交通灯、行人作为模型输入，也没有多车联合解码或碰撞约束；真实地图已用于展示与验证。该路口子集只保证 case 划分不重叠，不证明物理车辆、地点或时间独立；不是官方挑战榜单结果，也不提供道路安全保证。
