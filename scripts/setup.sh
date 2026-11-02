@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
+python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), "The CPU lock requires Python 3.12"'
 VENV_PATH="${TRAJECTORY_VENV:-/workspace/venvs/trajectory-prediction}"
 python3 -m venv "$VENV_PATH"
 "$VENV_PATH/bin/python" -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu

@@ -6,7 +6,7 @@
 
 ## Linux / 云环境
 
-Python 3.11–3.12。已实测 Python 3.12 + PyTorch 2.5.1 CPU，不要求 GPU 或在线服务：
+锁定的 Linux/云端脚本要求 Python 3.12；Windows 非锁定依赖入口支持 Python 3.11–3.12。已实测 Python 3.12 + PyTorch 2.5.1 CPU，不要求 GPU 或在线服务：
 
 ```bash
 cd /workspace/trajectory-prediction
