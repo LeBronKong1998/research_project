@@ -1,0 +1,247 @@
+{
+  "epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.5239123503367107,
+      "val_loss": 1.5032376258662252
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.4031270609961615,
+      "val_loss": 1.4146038185466419
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1.3402917385101318,
+      "val_loss": 1.34560226039453
+    },
+    {
+      "epoch": 4,
+      "train_loss": 1.2997470166948106,
+      "val_loss": 1.3070830341541406
+    },
+    {
+      "epoch": 5,
+      "train_loss": 1.253101646900177,
+      "val_loss": 1.2524624322399949
+    },
+    {
+      "epoch": 6,
+      "train_loss": 1.2266660663816664,
+      "val_loss": 1.2226881339694515
+    },
+    {
+      "epoch": 7,
+      "train_loss": 1.2020661036173503,
+      "val_loss": 1.2133648720654575
+    },
+    {
+      "epoch": 8,
+      "train_loss": 1.1881904403368633,
+      "val_loss": 1.2045982904506451
+    },
+    {
+      "epoch": 9,
+      "train_loss": 1.1697070664829678,
+      "val_loss": 1.2097518064758994
+    },
+    {
+      "epoch": 10,
+      "train_loss": 1.1410221325026617,
+      "val_loss": 1.2018536798881763
+    },
+    {
+      "epoch": 11,
+      "train_loss": 1.1382191247410245,
+      "val_loss": 1.2108015110998442
+    },
+    {
+      "epoch": 12,
+      "train_loss": 1.1314170360565186,
+      "val_loss": 1.1794837902892719
+    },
+    {
+      "epoch": 13,
+      "train_loss": 1.0925803780555725,
+      "val_loss": 1.1505846778551738
+    },
+    {
+      "epoch": 14,
+      "train_loss": 1.0884738432036505,
+      "val_loss": 1.1559478721835397
+    },
+    {
+      "epoch": 15,
+      "train_loss": 1.078978955745697,
+      "val_loss": 1.1496528043891445
+    },
+    {
+      "epoch": 16,
+      "train_loss": 1.0543612175517612,
+      "val_loss": 1.1501619391369098
+    },
+    {
+      "epoch": 17,
+      "train_loss": 1.0475255250930786,
+      "val_loss": 1.1181872414820122
+    },
+    {
+      "epoch": 18,
+      "train_loss": 1.0399546093410916,
+      "val_loss": 1.1439776601213398
+    },
+    {
+      "epoch": 19,
+      "train_loss": 1.0304226014349196,
+      "val_loss": 1.1446623729937004
+    },
+    {
+      "epoch": 20,
+      "train_loss": 1.040351602766249,
+      "val_loss": 1.1097659134503566
+    },
+    {
+      "epoch": 21,
+      "train_loss": 1.0229684909184773,
+      "val_loss": 1.1275129887190731
+    },
+    {
+      "epoch": 22,
+      "train_loss": 1.000953369670444,
+      "val_loss": 1.1281891392939019
+    },
+    {
+      "epoch": 23,
+      "train_loss": 1.007034334871504,
+      "val_loss": 1.1109570933110786
+    },
+    {
+      "epoch": 24,
+      "train_loss": 1.0154623985290527,
+      "val_loss": 1.093058910333749
+    },
+    {
+      "epoch": 25,
+      "train_loss": 1.003630605008867,
+      "val_loss": 1.1114217042922974
+    },
+    {
+      "epoch": 26,
+      "train_loss": 0.9961820708380805,
+      "val_loss": 1.10506614410516
+    },
+    {
+      "epoch": 27,
+      "train_loss": 0.9880194067955017,
+      "val_loss": 1.0900378570412144
+    },
+    {
+      "epoch": 28,
+      "train_loss": 0.9624345170127021,
+      "val_loss": 1.0867945163538961
+    },
+    {
+      "epoch": 29,
+      "train_loss": 0.9698503083652921,
+      "val_loss": 1.0853422049320105
+    },
+    {
+      "epoch": 30,
+      "train_loss": 0.962995343738132,
+      "val_loss": 1.0791196010329507
+    }
+  ],
+  "counts": {
+    "train": 282,
+    "val": 33,
+    "cal": 42,
+    "test": 111
+  },
+  "device": "cpu",
+  "max_batches": 0,
+  "configuration": {
+    "command": "train",
+    "device": "cpu",
+    "source": "interaction",
+    "data_dir": "data/interaction",
+    "history": 10,
+    "future": 30,
+    "synthetic_count": 80,
+    "stride": 10,
+    "seed": 7,
+    "output": "runs/interaction-real",
+    "epochs": 30,
+    "batch_size": 32,
+    "accumulation": 1,
+    "hidden": 64,
+    "modes": 3,
+    "lr": 0.001,
+    "max_batches": 0,
+    "log_every": 20
+  },
+  "data_manifest": {
+    "DR_USA_Intersection_GL_train.csv": "c59094abd09f3638268b916a8f24a1b83458ace02d2d8dd4d6861082401b6970"
+  },
+  "scene_ids": {
+    "train": [
+      "DR_USA_Intersection_GL_train.csv:1",
+      "DR_USA_Intersection_GL_train.csv:10",
+      "DR_USA_Intersection_GL_train.csv:12",
+      "DR_USA_Intersection_GL_train.csv:13",
+      "DR_USA_Intersection_GL_train.csv:15",
+      "DR_USA_Intersection_GL_train.csv:17",
+      "DR_USA_Intersection_GL_train.csv:19",
+      "DR_USA_Intersection_GL_train.csv:22",
+      "DR_USA_Intersection_GL_train.csv:23",
+      "DR_USA_Intersection_GL_train.csv:25",
+      "DR_USA_Intersection_GL_train.csv:27",
+      "DR_USA_Intersection_GL_train.csv:28",
+      "DR_USA_Intersection_GL_train.csv:30",
+      "DR_USA_Intersection_GL_train.csv:31",
+      "DR_USA_Intersection_GL_train.csv:32",
+      "DR_USA_Intersection_GL_train.csv:33",
+      "DR_USA_Intersection_GL_train.csv:34",
+      "DR_USA_Intersection_GL_train.csv:35",
+      "DR_USA_Intersection_GL_train.csv:38",
+      "DR_USA_Intersection_GL_train.csv:39",
+      "DR_USA_Intersection_GL_train.csv:40",
+      "DR_USA_Intersection_GL_train.csv:41",
+      "DR_USA_Intersection_GL_train.csv:42",
+      "DR_USA_Intersection_GL_train.csv:43",
+      "DR_USA_Intersection_GL_train.csv:44",
+      "DR_USA_Intersection_GL_train.csv:45",
+      "DR_USA_Intersection_GL_train.csv:46",
+      "DR_USA_Intersection_GL_train.csv:48",
+      "DR_USA_Intersection_GL_train.csv:49",
+      "DR_USA_Intersection_GL_train.csv:51",
+      "DR_USA_Intersection_GL_train.csv:6"
+    ],
+    "val": [
+      "DR_USA_Intersection_GL_train.csv:14",
+      "DR_USA_Intersection_GL_train.csv:16",
+      "DR_USA_Intersection_GL_train.csv:2",
+      "DR_USA_Intersection_GL_train.csv:21",
+      "DR_USA_Intersection_GL_train.csv:47"
+    ],
+    "cal": [
+      "DR_USA_Intersection_GL_train.csv:20",
+      "DR_USA_Intersection_GL_train.csv:26",
+      "DR_USA_Intersection_GL_train.csv:37",
+      "DR_USA_Intersection_GL_train.csv:52",
+      "DR_USA_Intersection_GL_train.csv:7"
+    ],
+    "test": [
+      "DR_USA_Intersection_GL_train.csv:11",
+      "DR_USA_Intersection_GL_train.csv:18",
+      "DR_USA_Intersection_GL_train.csv:24",
+      "DR_USA_Intersection_GL_train.csv:29",
+      "DR_USA_Intersection_GL_train.csv:3",
+      "DR_USA_Intersection_GL_train.csv:36",
+      "DR_USA_Intersection_GL_train.csv:4",
+      "DR_USA_Intersection_GL_train.csv:5",
+      "DR_USA_Intersection_GL_train.csv:50",
+      "DR_USA_Intersection_GL_train.csv:8",
+      "DR_USA_Intersection_GL_train.csv:9"
+    ]
+  }
+}

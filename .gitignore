@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+runs/
+data/
+torch-wheel-*/
+.conda/
+.venv/
+.idea/
+*.egg-info/
+build/
+dist/

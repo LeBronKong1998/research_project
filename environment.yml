@@ -1,0 +1,7 @@
+name: trajectory-prediction
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+# After creation, install PyTorch from its official CPU/CUDA index, then requirements.txt.

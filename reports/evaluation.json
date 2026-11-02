@@ -1,0 +1,52 @@
+{
+  "sample_count": 111,
+  "scene_count": 11,
+  "metrics": {
+    "minADE": 0.8390249774732568,
+    "minFDE": 2.2448188053058074,
+    "top1ADE": 1.4035363490986932,
+    "top1FDE": 3.862178793764329,
+    "top1PositionRMSE": 1.8471481844380095,
+    "top1VelocityError": 1.3417651603283647,
+    "top1HeadingErrorRad": 0.2569893830684475,
+    "minVelocityError": 0.8367014536382379,
+    "minHeadingErrorRad": 0.13590855645917793,
+    "missRate2m": 0.38738738738738737,
+    "top1EndpointAccuracy2m": 0.4144144144144144,
+    "top1Displacement@1s": 0.48832797663504474,
+    "top1Displacement@2s": 1.7939304017738715,
+    "top1Displacement@3s": 3.862178793764329
+  },
+  "window_coverage": null,
+  "scene_coverage": null,
+  "radius_m": null,
+  "constant_velocity": {
+    "minADE": 1.3487902986995355,
+    "minFDE": 3.722817281126842,
+    "top1ADE": 1.3487902986995355,
+    "top1FDE": 3.722817281126842,
+    "top1PositionRMSE": 1.7804478888257265,
+    "top1VelocityError": 1.2803091141017708,
+    "top1HeadingErrorRad": 0.11226514832726009,
+    "minVelocityError": 1.2803091141017708,
+    "minHeadingErrorRad": 0.11226514832726009,
+    "missRate2m": 0.5225225225225225,
+    "top1EndpointAccuracy2m": 0.4774774774774775,
+    "top1Displacement@1s": 0.46130599831608504,
+    "top1Displacement@2s": 1.724943612844826,
+    "top1Displacement@3s": 3.722817281126842
+  },
+  "source": "interaction",
+  "history_frames": 10,
+  "future_frames": 30,
+  "dt_seconds": 0.1,
+  "data_manifest": {
+    "DR_USA_Intersection_GL_train.csv": "c59094abd09f3638268b916a8f24a1b83458ace02d2d8dd4d6861082401b6970"
+  },
+  "test_total_samples": 111,
+  "subset_evaluation": false,
+  "checkpoint": "runs/interaction-real/best.pt",
+  "selected_epoch": 30,
+  "training_max_batches": 0,
+  "protocol": "custom case-disjoint split; not official challenge benchmark"
+}

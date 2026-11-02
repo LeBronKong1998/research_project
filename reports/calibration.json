@@ -1,0 +1,7 @@
+{
+  "alpha": 0.05,
+  "radius_m": null,
+  "scene_count": 5,
+  "finite_sample_rank": 6,
+  "coverage_scope": "all target windows in a held-out scene"
+}

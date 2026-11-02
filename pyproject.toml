@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trajectory-prediction"
+version = "0.2.0"
+description = "GRU graph-attention vehicle trajectory prediction on real INTERACTION CSVs"
+requires-python = ">=3.11,<3.13"
+dependencies = ["numpy>=1.23,<2", "torch==2.5.1", "matplotlib>=3.6,<4"]
+
+[project.scripts]
+trajectory-prediction = "vehtraj.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["vehtraj*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
